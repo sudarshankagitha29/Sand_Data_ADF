@@ -1,0 +1,9 @@
+{
+	"name": "sudarshanadf29",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a9281a7a-876f-45c1-94e8-f8d4f31c0cd3",
+		"tenantId": "a9079bfa-a919-4023-bf24-e8abee9145a7"
+	}
+}

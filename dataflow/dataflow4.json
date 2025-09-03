@@ -1,0 +1,149 @@
+{
+	"name": "dataflow4",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText51",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText52",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText53",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText54",
+						"type": "DatasetReference"
+					},
+					"name": "product"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText55",
+						"type": "DatasetReference"
+					},
+					"name": "category"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable5",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "union1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "alterRow1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          SaleID as string,",
+				"          StoreID as string,",
+				"          ProductID as string,",
+				"          SaleDate as string,",
+				"          Quantity as string,",
+				"          Amount as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          SaleID as string,",
+				"          StoreID as string,",
+				"          ProductID as string,",
+				"          SaleDate as string,",
+				"          Quantity as string,",
+				"          Amount as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source(output(",
+				"          SaleID as string,",
+				"          StoreID as string,",
+				"          ProductID as string,",
+				"          SaleDate as string,",
+				"          Quantity as string,",
+				"          Amount as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source3",
+				"source(output(",
+				"          ProductID as string,",
+				"          ProductName as string,",
+				"          CategoryID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> product",
+				"source(output(",
+				"          CategoryID as string,",
+				"          CategoryName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> category",
+				"source1, source2, source3 union(byName: true)~> union1",
+				"union1 filter(!isNull(SaleID) && greaterOrEqual(toInteger(Quantity),0) && greaterOrEqual(toInteger(Amount),0)) ~> filter1",
+				"filter1 sort(asc(Amount, true)) ~> sort1",
+				"sort1 alterRow(upsertIf(1==1)) ~> alterRow1",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SaleID as string,",
+				"          StoreID as string,",
+				"          ProductID as string,",
+				"          SaleDate as string,",
+				"          Quantity as string,",
+				"          Amount as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['SaleID'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          SaleID,",
+				"          StoreID,",
+				"          ProductID,",
+				"          SaleDate,",
+				"          Quantity,",
+				"          Amount",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "AzureSqlDatabase3_key",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sudarshan29sqlsrvr.database.windows.net",
+			"database": "sudarshan29sqldb",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "admin123",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "sudarshan29sqldbkey"
+			}
+		}
+	}
+}

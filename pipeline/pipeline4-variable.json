@@ -1,0 +1,37 @@
+{
+	"name": "pipeline4-variable",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Var",
+					"value": {
+						"value": "@variables('var1')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Var": {
+				"type": "String",
+				"defaultValue": "Sudha"
+			},
+			"var1": {
+				"type": "String",
+				"defaultValue": "Manoj"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-14T10:58:55Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

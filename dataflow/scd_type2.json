@@ -1,0 +1,260 @@
+{
+	"name": "scd_type2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText56",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable8",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable9",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable10",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable12",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "alterRow2"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "select4"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Employee_ID as integer,",
+				"          Name as string,",
+				"          Status as string,",
+				"          Salary as integer,",
+				"          Start_Date as date,",
+				"          End_Date as date,",
+				"          Is_Active as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          Surrogate_Key as integer,",
+				"          Employee_ID as integer,",
+				"          Name as string,",
+				"          Status as string,",
+				"          Salary as integer,",
+				"          Start_Date as date,",
+				"          End_Date as date,",
+				"          Is_Active as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source2",
+				"source1, source2 lookup(source1@Employee_ID == source2@Employee_ID,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 split(isNull(source2@Employee_ID),",
+				"     !isNull(source2@Employee_ID) && (source1@Status != source2@Status || source1@Salary != source2@Salary),",
+				"     disjoint: false) ~> split1@(NewRecords, ChangedRecords, UnchangedRecords)",
+				"split1@NewRecords derive(Is_Active = 'Y',",
+				"          End_Date = '9999-12-31') ~> derivedColumn1",
+				"split1@ChangedRecords alterRow(updateIf(1==1)) ~> alterRow2",
+				"alterRow2 derive(Is_Active = 'N',",
+				"          End_Date = addDays(split1@ChangedRecords@Start_Date, -1)) ~> derivedColumn2",
+				"derivedColumn1 select(mapColumn(",
+				"          Employee_ID = split1@NewRecords@Employee_ID,",
+				"          Name = split1@NewRecords@Name,",
+				"          Status = split1@NewRecords@Status,",
+				"          Salary = split1@NewRecords@Salary,",
+				"          Start_Date = split1@NewRecords@Start_Date,",
+				"          End_Date,",
+				"          Is_Active,",
+				"          Surrogate_Key,",
+				"          Employee_ID = split1@NewRecords@Employee_ID,",
+				"          Name = split1@NewRecords@Name,",
+				"          Status = split1@NewRecords@Status,",
+				"          Salary = split1@NewRecords@Salary,",
+				"          Start_Date = split1@NewRecords@Start_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn2 select(mapColumn(",
+				"          Employee_ID = split1@ChangedRecords@Employee_ID,",
+				"          Name = split1@ChangedRecords@Name,",
+				"          Status = split1@ChangedRecords@Status,",
+				"          Salary = split1@ChangedRecords@Salary,",
+				"          Start_Date = split1@ChangedRecords@Start_Date,",
+				"          End_Date,",
+				"          Is_Active,",
+				"          Surrogate_Key,",
+				"          Employee_ID = split1@ChangedRecords@Employee_ID,",
+				"          Name = split1@ChangedRecords@Name,",
+				"          Status = split1@ChangedRecords@Status,",
+				"          Salary = split1@ChangedRecords@Salary,",
+				"          Start_Date = split1@ChangedRecords@Start_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"split1@UnchangedRecords select(mapColumn(",
+				"          Employee_ID = split1@UnchangedRecords@Employee_ID,",
+				"          Name = split1@UnchangedRecords@Name,",
+				"          Status = split1@UnchangedRecords@Status,",
+				"          Salary = split1@UnchangedRecords@Salary,",
+				"          Start_Date = split1@UnchangedRecords@Start_Date,",
+				"          End_Date = split1@UnchangedRecords@End_Date,",
+				"          Is_Active = split1@UnchangedRecords@Is_Active,",
+				"          Surrogate_Key,",
+				"          Employee_ID = split1@UnchangedRecords@Employee_ID,",
+				"          Name = split1@UnchangedRecords@Name,",
+				"          Status = split1@UnchangedRecords@Status,",
+				"          Salary = split1@UnchangedRecords@Salary,",
+				"          Start_Date = split1@UnchangedRecords@Start_Date,",
+				"          End_Date = split1@UnchangedRecords@End_Date,",
+				"          Is_Active = split1@UnchangedRecords@Is_Active",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select4",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Surrogate_Key as integer,",
+				"          Employee_ID as integer,",
+				"          Name as string,",
+				"          Status as string,",
+				"          Salary as integer,",
+				"          Start_Date as date,",
+				"          End_Date as date,",
+				"          Is_Active as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Surrogate_Key,",
+				"          Employee_ID,",
+				"          Name,",
+				"          Status,",
+				"          Salary,",
+				"          Start_Date,",
+				"          End_Date,",
+				"          Is_Active",
+				"     )) ~> sink1",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Surrogate_Key as integer,",
+				"          Employee_ID as integer,",
+				"          Name as string,",
+				"          Status as string,",
+				"          Salary as integer,",
+				"          Start_Date as date,",
+				"          End_Date as date,",
+				"          Is_Active as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['Employee_ID'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Surrogate_Key,",
+				"          Employee_ID,",
+				"          Name,",
+				"          Status,",
+				"          Salary,",
+				"          Start_Date,",
+				"          End_Date,",
+				"          Is_Active",
+				"     )) ~> sink2",
+				"select4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Surrogate_Key as integer,",
+				"          Employee_ID as integer,",
+				"          Name as string,",
+				"          Status as string,",
+				"          Salary as integer,",
+				"          Start_Date as date,",
+				"          End_Date as date,",
+				"          Is_Active as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 3,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Surrogate_Key,",
+				"          Employee_ID,",
+				"          Name,",
+				"          Status,",
+				"          Salary,",
+				"          Start_Date,",
+				"          End_Date,",
+				"          Is_Active",
+				"     )) ~> sink4"
+			]
+		}
+	}
+}

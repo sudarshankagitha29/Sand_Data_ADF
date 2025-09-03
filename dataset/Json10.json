@@ -1,0 +1,33 @@
+{
+	"name": "Json10",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Output-Data",
+				"fileSystem": "sand-data"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"airline_id": {
+					"type": "string"
+				},
+				"airline_name": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
