@@ -1,0 +1,72 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "sudarshanadf29"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"AzureSqlDatabase2_password": {
+			"value": ""
+		},
+		"MySql1_password": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://sudarshan29.dfs.core.windows.net"
+		},
+		"AzureDataLakeStorage2_key_properties_typeProperties_url": {
+			"value": "https://sudarshan29.dfs.core.windows.net/"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://Sudarshan29.vault.azure.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "sudarshan29sqlsrvr.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "@{linkedService().dbname}"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "admin123"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_server": {
+			"value": "sudarshan29sqlsrvr.database.windows.net"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_database": {
+			"value": "sudarshan29sqldb"
+		},
+		"AzureSqlDatabase2_properties_typeProperties_userName": {
+			"value": "admin123"
+		},
+		"AzureSqlDatabase3_key_properties_typeProperties_server": {
+			"value": "sudarshan29sqlsrvr.database.windows.net"
+		},
+		"AzureSqlDatabase3_key_properties_typeProperties_database": {
+			"value": "sudarshan29sqldb"
+		},
+		"AzureSqlDatabase3_key_properties_typeProperties_userName": {
+			"value": "admin123"
+		},
+		"MySql1_properties_typeProperties_server": {
+			"value": "localhost"
+		},
+		"MySql1_properties_typeProperties_database": {
+			"value": "world"
+		},
+		"MySql1_properties_typeProperties_username": {
+			"value": "root"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
