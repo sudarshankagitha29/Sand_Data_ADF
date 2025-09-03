@@ -1,0 +1,16 @@
+EmpID,EmpName,DeptID,Salary,JoinDate,Location
+101,Ananya,10.0,85000,2023-04-15,Hyderabad
+102,Rahul,10.0,72000,2022-11-01,Bengaluru
+103,Meera,20.0,69000,2024-02-10,Pune
+104,Vikram,30.0,95000,2021-08-23,Chennai
+105,Priya,40.0,54000,2023-06-30,Hyderabad
+106,Sanjay,20.0,61000,2020-01-12,Delhi
+107,Ishita,60.0,78000,2022-03-09,Noida
+108,Karthik,70.0,67000,2024-07-01,Mumbai
+109,Divya,,52000,2023-09-19,Remote
+110,Aman,50.0,83000,2021-12-05,Bengaluru
+111,Sneha,20.0,73000,2022-05-14,Hyderabad
+112,Arjun,80.0,59000,2024-03-02,Kolkata
+113,Neha,30.0,91000,2020-10-10,Chennai
+114,Farhan,90.0,62000,2024-01-15,Pune
+115,Aisha,40.0,56000,2022-09-27,Hyderabad
